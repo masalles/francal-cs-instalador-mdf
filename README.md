@@ -31,8 +31,16 @@ Este script PowerShell **automatiza** a configuração do Microsoft Data Formula
 ---
 
 ## 🚀 Como Usar  
+### Clique com o botão direito em "PowerShell", "Executar como Administrador"
 
-### Clique com o botão direito em "PowerShell", "Executar como Administrador", cole o comando e pressione "ENTER":  
+### Crie uma pasta para o projeto: Ex.:"c:\mdf\projeto01":  
+```powershell
+mkdir c:\mdf\projeto01
+```
+```powershell
+cd c:\mdf\projeto01
+```
+Cole o comando para executar o script e pressione "ENTER" para iniciar:  
 ```powershell
 irm "https://raw.githubusercontent.com/masalles/francal-cs-instalador-mdf/refs/heads/main/francal-cs-mdf-installer-pt-br.ps1" | iex
 ```
