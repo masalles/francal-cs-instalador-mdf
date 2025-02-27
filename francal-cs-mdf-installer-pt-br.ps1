@@ -1,31 +1,11 @@
 # Configura a codificação para UTF-8 para garantir que caracteres especiais sejam exibidos corretamente
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-# Altera a codificação do console para UTF-8
-chcp 65001 | Out-Null
-
 # Configura a política de execução para permitir a execução do script
 Set-ExecutionPolicy Bypass -Scope Process -Force
 
 # Limpa a tela
 Clear-Host
-
-# Cria a pasta c:\microsoft-data-formulator se não existir
-if (-not (Test-Path -Path "c:\microsoft-data-formulator")) {
-    New-Item -Path "c:\microsoft-data-formulator" -ItemType Directory -Force | Out-Null
-}
-
-# Define o diretório de trabalho para todas as operações
-$workingDir = "c:\microsoft-data-formulator"
-# Muda para o diretório de trabalho
-Push-Location -Path $workingDir
-
-# Função para garantir que estamos no diretório de trabalho
-function Garantir-DiretorioTrabalho {
-    if ((Get-Location).Path -ne $workingDir) {
-        Set-Location -Path $workingDir
-    }
-}
 
 # Função para verificar se um comando existe
 function Existe-Comando {
@@ -134,9 +114,6 @@ function Mostrar-Despedida {
 
 # Função para instalar o Data Formulator com progresso
 function Instalar-DataFormulator {
-    # Garante que estamos no diretório de trabalho
-    Garantir-DiretorioTrabalho
-    
     $prefixo = "    "
     
     # Lista de pacotes principais que serão instalados
@@ -236,33 +213,6 @@ if (-not (Existe-Comando "choco")) {
     Mostrar-Status "Chocolatey ja esta instalado." "sucesso"
 }
 
-# Instala o Python3 se não estiver instalado
-if (-not (Existe-Comando "python")) {
-    Mostrar-Status "Instalando Python3..." "progresso"
-    choco install python3 -y
-    Mostrar-Status "Python3 instalado com sucesso!" "sucesso"
-} else {
-    Mostrar-Status "Python3 ja esta instalado." "sucesso"
-}
-
-# Instala o pip (instalador de pacotes do Python) se não estiver instalado
-if (-not (Existe-Comando "pip")) {
-    Mostrar-Status "Instalando pip..." "progresso"
-    choco install pip -y
-    Mostrar-Status "pip instalado com sucesso!" "sucesso"
-} else {
-    Mostrar-Status "pip ja esta instalado." "sucesso"
-}
-
-# Instala o virtualenv se não estiver instalado
-if (-not (Existe-Comando "virtualenv")) {
-    Mostrar-Status "Instalando virtualenv..." "progresso"
-    pip install virtualenv
-    Mostrar-Status "virtualenv instalado com sucesso!" "sucesso"
-} else {
-    Mostrar-Status "virtualenv ja esta instalado." "sucesso"
-}
-
 # Instala o Git se não estiver instalado
 if (-not (Existe-Comando "git")) {
     Mostrar-Status "Instalando Git..." "progresso"
@@ -290,20 +240,44 @@ if (-not (Existe-Comando "yarn")) {
     Mostrar-Status "Yarn ja esta instalado." "sucesso"
 }
 
+# Instala o Python3 se não estiver instalado
+if (-not (Existe-Comando "python")) {
+    Mostrar-Status "Instalando Python3..." "progresso"
+    choco install python3 -y
+    Mostrar-Status "Python3 instalado com sucesso!" "sucesso"
+} else {
+    Mostrar-Status "Python3 ja esta instalado." "sucesso"
+}
+
+# Instala o pip (instalador de pacotes do Python) se não estiver instalado
+if (-not (Existe-Comando "pip")) {
+    Mostrar-Status "Instalando pip..." "progresso"
+    choco install pip -y
+    Mostrar-Status "pip instalado com sucesso!" "sucesso"
+} else {
+    Mostrar-Status "pip ja esta instalado." "sucesso"
+}
+
+# Instala o virtualenv se não estiver instalado
+if (-not (Existe-Comando "virtualenv")) {
+    Mostrar-Status "Instalando virtualenv..." "progresso"
+    pip install virtualenv
+    Mostrar-Status "virtualenv instalado com sucesso!" "sucesso"
+} else {
+    Mostrar-Status "virtualenv ja esta instalado." "sucesso"
+}
+
 # Seção de configuração do ambiente
 Mostrar-Cabecalho "CONFIGURACAO DO AMBIENTE"
 
-# Garante que estamos no diretório de trabalho
-Garantir-DiretorioTrabalho
-
 # Cria e ativa um ambiente virtual
 Mostrar-Status "Configurando ambiente virtual Python..." "progresso"
-virtualenv "$workingDir\venv"
+virtualenv venv
 Mostrar-Status "Ambiente virtual criado com sucesso!" "sucesso"
 
 # Ativa o ambiente virtual no PowerShell
 Mostrar-Status "Ativando o ambiente virtual..." "progresso"
-& "$workingDir\venv\Scripts\Activate.ps1"
+.\venv\Scripts\Activate.ps1
 Mostrar-Status "Ambiente virtual ativado com sucesso!" "sucesso"
 
 # Seção de instalação do Data Formulator
@@ -342,15 +316,9 @@ Mostrar-Status "Aguarde enquanto o servidor e iniciado e o navegador e aberto...
 Mostrar-Status "Para encerrar o servidor, pressione Ctrl+C nesta janela." "info"
 Escrever-Colorido ""
 
-# Garante que estamos no diretório de trabalho
-Garantir-DiretorioTrabalho
-
 # Cria um arquivo de script temporário para executar o Data Formulator
 $tempScriptPath = [System.IO.Path]::GetTempFileName() + ".ps1"
 $scriptContent = @"
-# Muda para o diretório de trabalho
-Set-Location -Path "$workingDir"
-
 try {
     python -m data_formulator
 } finally {
@@ -366,6 +334,3 @@ powershell -File $tempScriptPath
 
 # Remove o script temporário
 Remove-Item -Path $tempScriptPath -Force
-
-# Restaura o diretório original
-Pop-Location
