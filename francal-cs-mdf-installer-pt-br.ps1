@@ -236,33 +236,6 @@ if (-not (Existe-Comando "choco")) {
     Mostrar-Status "Chocolatey ja esta instalado." "sucesso"
 }
 
-# Instala o Git se não estiver instalado
-if (-not (Existe-Comando "git")) {
-    Mostrar-Status "Instalando Git..." "progresso"
-    choco install git -y
-    Mostrar-Status "Git instalado com sucesso!" "sucesso"
-} else {
-    Mostrar-Status "Git ja esta instalado." "sucesso"
-}
-
-# Instala o Node.js (que inclui npm) se não estiver instalado
-if (-not (Existe-Comando "node")) {
-    Mostrar-Status "Instalando Node.js..." "progresso"
-    choco install nodejs -y
-    Mostrar-Status "Node.js instalado com sucesso!" "sucesso"
-} else {
-    Mostrar-Status "Node.js ja esta instalado." "sucesso"
-}
-
-# Instala o Yarn se não estiver instalado
-if (-not (Existe-Comando "yarn")) {
-    Mostrar-Status "Instalando Yarn..." "progresso"
-    npm install --global yarn
-    Mostrar-Status "Yarn instalado com sucesso!" "sucesso"
-} else {
-    Mostrar-Status "Yarn ja esta instalado." "sucesso"
-}
-
 # Instala o Python3 se não estiver instalado
 if (-not (Existe-Comando "python")) {
     Mostrar-Status "Instalando Python3..." "progresso"
@@ -288,6 +261,33 @@ if (-not (Existe-Comando "virtualenv")) {
     Mostrar-Status "virtualenv instalado com sucesso!" "sucesso"
 } else {
     Mostrar-Status "virtualenv ja esta instalado." "sucesso"
+}
+
+# Instala o Git se não estiver instalado
+if (-not (Existe-Comando "git")) {
+    Mostrar-Status "Instalando Git..." "progresso"
+    choco install git -y
+    Mostrar-Status "Git instalado com sucesso!" "sucesso"
+} else {
+    Mostrar-Status "Git ja esta instalado." "sucesso"
+}
+
+# Instala o Node.js (que inclui npm) se não estiver instalado
+if (-not (Existe-Comando "node")) {
+    Mostrar-Status "Instalando Node.js..." "progresso"
+    choco install nodejs -y
+    Mostrar-Status "Node.js instalado com sucesso!" "sucesso"
+} else {
+    Mostrar-Status "Node.js ja esta instalado." "sucesso"
+}
+
+# Instala o Yarn se não estiver instalado
+if (-not (Existe-Comando "yarn")) {
+    Mostrar-Status "Instalando Yarn..." "progresso"
+    npm install --global yarn
+    Mostrar-Status "Yarn instalado com sucesso!" "sucesso"
+} else {
+    Mostrar-Status "Yarn ja esta instalado." "sucesso"
 }
 
 # Seção de configuração do ambiente
